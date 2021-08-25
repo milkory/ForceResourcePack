@@ -1,0 +1,12 @@
+resource-pack:
+  url: ''
+
+setting:
+  after-auth: true # 是否在登录后再加载资源包 (仅支持 Authme)
+
+limbo:
+  enable: true
+  location:
+    world: 'world'
+    position: '0.0, 0.0, 0.0' # 坐标
+    rotation: '0.0, 0.0' # 朝向

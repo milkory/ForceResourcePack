@@ -1,0 +1,19 @@
+name: ForceResourcePack
+main: com.milkory.forceresourcepack.ForceResourcePack
+version: ${version}
+api-version: 1.13
+
+author: Milkory
+softdepend: [ Authme ]
+
+commands:
+  force-resource-pack:
+    aliases: [ frp ]
+
+permissions:
+  force-resource-pack.admin:
+    children:
+      - force-resource-pack.command.reload
+    default: op
+
+### CUSTOM PLUGIN 2021-08-25 ###
