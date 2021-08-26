@@ -1,6 +1,7 @@
 package com.milkory.forceresourcepack;
 
 import com.milkory.forceresourcepack.common.Config;
+import com.milkory.forceresourcepack.hook.MultiverseCoreHook;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -34,18 +35,32 @@ public class FRPLimbo {
 
     public void add(Player player) {
         this.playerToLastLocation.put(player, player.getLocation());
-        player.teleport(location);
+        teleport0(player);
     }
 
     public void remove(Player player) {
-        if (this.playerToLastLocation.containsKey(player)) {
-            player.teleport(this.playerToLastLocation.get(player));
+        if (has(player)) {
+            MultiverseCoreHook.getHook().teleport(player, this.playerToLastLocation.get(player));
             this.playerToLastLocation.remove(player);
         }
     }
 
+    public boolean has(Player player) {
+        return this.playerToLastLocation.containsKey(player);
+    }
+
+    public void teleport(Player player) {
+        if (has(player)) {
+            teleport0(player);
+        }
+    }
+
+    public void teleport0(Player player) {
+        MultiverseCoreHook.getHook().teleport(player, location);
+    }
+
     private double[] getVector(String string) {
-        return Arrays.stream(string.replace(" ","").split(","))
+        return Arrays.stream(string.replace(" ", "").split(","))
                 .mapToDouble(Double::parseDouble).toArray();
     }
 

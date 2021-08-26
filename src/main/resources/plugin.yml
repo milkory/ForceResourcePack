@@ -4,7 +4,7 @@ version: ${version}
 api-version: 1.13
 
 author: Milkory
-softdepend: [ Authme ]
+softdepend: [ Authme, Multiverse-Core ]
 
 commands:
   force-resource-pack:
@@ -14,6 +14,7 @@ permissions:
   force-resource-pack.admin:
     children:
       - force-resource-pack.command.reload
+      - force-resource-pack.command.push
     default: op
 
 ### CUSTOM PLUGIN 2021-08-25 ###

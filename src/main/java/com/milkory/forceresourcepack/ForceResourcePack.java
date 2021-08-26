@@ -3,6 +3,7 @@ package com.milkory.forceresourcepack;
 import com.milkory.forceresourcepack.common.Config;
 import com.milkory.forceresourcepack.common.Message;
 import com.milkory.forceresourcepack.hook.AuthMeHook;
+import com.milkory.forceresourcepack.hook.MultiverseCoreHook;
 import com.milkory.forceresourcepack.listener.AuthMeListener;
 import com.milkory.forceresourcepack.listener.CommonListener;
 import com.milkory.forceresourcepack.listener.LimboListener;
@@ -12,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +44,7 @@ public class ForceResourcePack extends JavaPlugin {
     }
 
     @Override public void onEnable() {
+        MultiverseCoreHook.getHook().hook();
         FRPLimbo.getInstance().load();
 
         if (Config.bool("setting.after-auth") && AuthMeHook.getHook().hook()) {
@@ -63,10 +66,27 @@ public class ForceResourcePack extends JavaPlugin {
     }
 
     @Override public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 1 && "reload".equalsIgnoreCase(args[0]) && sender.hasPermission("force-resource-pack.command.reload")) {
-            load();
-            sender.sendMessage(ChatColor.GREEN + "Reloaded successfully!");
-        } else sender.sendMessage(ChatColor.RED + "Unknown command or lack permission.");
+        if (args.length == 1) {
+            switch (args[0].toLowerCase()) {
+                case "reload":
+                    if (sender.hasPermission("force-resource-pack.command.reload")) {
+                        load();
+                        sender.sendMessage(ChatColor.GREEN + "Reloaded successfully!");
+                        return true;
+                    }
+                    break;
+                case "push":
+                    if (sender.hasPermission("force-resource-pack.command.push")) {
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            ResourcePackManager.getInstance().loadResourcePackFor(player);
+                        }
+                        sender.sendMessage(ChatColor.GREEN + "Pushed successfully!");
+                        return true;
+                    }
+                    break;
+            }
+        }
+        sender.sendMessage(ChatColor.RED + "Unknown command or lack permission.");
         return true;
     }
 

@@ -1,14 +1,15 @@
 package com.milkory.forceresourcepack.listener;
 
 import com.milkory.forceresourcepack.FRPLimbo;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.*;
 
 /**
@@ -24,13 +25,13 @@ public class LimboListener implements Listener {
 
     private void limboCancel(EntityEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
-        if (limboCheck((Player) event.getEntity())) {
+        if (limboCheck(event.getEntity())) {
             ((Cancellable) event).setCancelled(true);
         }
     }
 
-    private boolean limboCheck(Player player) {
-        return FRPLimbo.getInstance().getPlayerToLastLocation().containsKey(player);
+    private boolean limboCheck(Entity entity) {
+        return entity instanceof Player && FRPLimbo.getInstance().getPlayerToLastLocation().containsKey((Player) entity);
     }
 
     @EventHandler
@@ -61,6 +62,21 @@ public class LimboListener implements Listener {
     @EventHandler
     public void onPickupItem(EntityPickupItemEvent event) {
         limboCancel(event);
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        limboCancel(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
+        event.setCancelled(limboCheck(event.getDamager()));
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onCraft(CraftItemEvent event) {
+        event.setCancelled(limboCheck(event.getWhoClicked()));
     }
 
     @EventHandler(ignoreCancelled = true)
