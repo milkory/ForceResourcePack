@@ -1,8 +1,9 @@
-package com.milkory.forceresourcepack;
+package com.milkory.forceresourcepack.limbo;
 
 import com.milkory.forceresourcepack.common.Config;
 import com.milkory.forceresourcepack.hook.MultiverseCoreHook;
 import lombok.Getter;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,8 +21,14 @@ public class FRPLimbo {
 
     @Getter private static final FRPLimbo instance = new FRPLimbo();
 
-    @Getter private final Map<Player, Location> playerToLastLocation = new HashMap<>();
+    @Getter private boolean isClosed = false;
+
+    @Getter private final Map<Player, LimboPlayerData> playerData = new HashMap<>();
     @Getter private Location location;
+
+    private void checkIfClosed() {
+        Validate.isTrue(!isClosed, "Illegal access when limbo is closed");
+    }
 
     public void load() {
         if (Config.bool("limbo.enable")) {
@@ -34,19 +41,28 @@ public class FRPLimbo {
     }
 
     public void add(Player player) {
-        this.playerToLastLocation.put(player, player.getLocation());
-        teleport0(player);
+        checkIfClosed();
+        LimboPlayerData data = new LimboPlayerData(player);
+        this.playerData.put(player, data);
+        data.limbo();
     }
 
     public void remove(Player player) {
-        if (has(player)) {
-            MultiverseCoreHook.getHook().teleport(player, this.playerToLastLocation.get(player));
-            this.playerToLastLocation.remove(player);
+        checkIfClosed();
+        LimboPlayerData result = this.playerData.get(player);
+        if (result != null) {
+            result.revert();
+            this.playerData.remove(player);
         }
     }
 
+    public void close() {
+        this.isClosed = true;
+        this.playerData.forEach((key, value) -> value.revert());
+    }
+
     public boolean has(Player player) {
-        return this.playerToLastLocation.containsKey(player);
+        return this.playerData.containsKey(player);
     }
 
     public void teleport(Player player) {

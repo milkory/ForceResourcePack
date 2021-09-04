@@ -4,6 +4,7 @@ import com.milkory.forceresourcepack.common.Config;
 import com.milkory.forceresourcepack.common.Message;
 import com.milkory.forceresourcepack.hook.AuthMeHook;
 import com.milkory.forceresourcepack.hook.MultiverseCoreHook;
+import com.milkory.forceresourcepack.limbo.FRPLimbo;
 import com.milkory.forceresourcepack.listener.AuthMeListener;
 import com.milkory.forceresourcepack.listener.CommonListener;
 import com.milkory.forceresourcepack.listener.LimboListener;
@@ -53,6 +54,10 @@ public class ForceResourcePack extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new CommonListener(), this);
         Bukkit.getPluginManager().registerEvents(new LimboListener(), this);
+    }
+
+    @Override public void onDisable() {
+        FRPLimbo.getInstance().close();
     }
 
     public InputStreamReader getResourceReader(String file) {

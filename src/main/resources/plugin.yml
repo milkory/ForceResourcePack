@@ -4,7 +4,7 @@ version: ${version}
 api-version: 1.13
 
 author: Milkory
-softdepend: [ Authme, Multiverse-Core ]
+softdepend: [ AuthMe, Multiverse-Core ]
 
 commands:
   force-resource-pack:

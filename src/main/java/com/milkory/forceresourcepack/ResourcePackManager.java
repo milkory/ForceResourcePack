@@ -3,6 +3,7 @@ package com.milkory.forceresourcepack;
 import com.google.common.base.Strings;
 import com.milkory.forceresourcepack.common.Config;
 import com.milkory.forceresourcepack.common.Message;
+import com.milkory.forceresourcepack.limbo.FRPLimbo;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 

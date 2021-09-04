@@ -1,6 +1,6 @@
 package com.milkory.forceresourcepack.listener;
 
-import com.milkory.forceresourcepack.FRPLimbo;
+import com.milkory.forceresourcepack.limbo.FRPLimbo;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -31,7 +31,7 @@ public class LimboListener implements Listener {
     }
 
     private boolean limboCheck(Entity entity) {
-        return entity instanceof Player && FRPLimbo.getInstance().getPlayerToLastLocation().containsKey((Player) entity);
+        return entity instanceof Player && FRPLimbo.getInstance().has((Player) entity);
     }
 
     @EventHandler
@@ -66,6 +66,11 @@ public class LimboListener implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
+        limboCancel(event);
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
         limboCancel(event);
     }
 

@@ -1,6 +1,6 @@
 package com.milkory.forceresourcepack.listener;
 
-import com.milkory.forceresourcepack.FRPLimbo;
+import com.milkory.forceresourcepack.limbo.FRPLimbo;
 import com.milkory.forceresourcepack.ResourcePackManager;
 import com.milkory.forceresourcepack.common.Message;
 import org.bukkit.entity.Player;
@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 /**
  * @author Milkory
