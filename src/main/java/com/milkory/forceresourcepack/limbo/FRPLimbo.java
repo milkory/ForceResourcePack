@@ -43,16 +43,16 @@ public class FRPLimbo {
     public void add(Player player) {
         checkIfClosed();
         LimboPlayerData data = new LimboPlayerData(player);
-        this.playerData.put(player, data);
         data.limbo();
+        this.playerData.put(player, data);
     }
 
     public void remove(Player player) {
         checkIfClosed();
         LimboPlayerData result = this.playerData.get(player);
         if (result != null) {
-            result.revert();
             this.playerData.remove(player);
+            result.revert();
         }
     }
 

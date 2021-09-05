@@ -29,7 +29,7 @@ public class LimboPlayerData {
     }
 
     public void limbo() {
-        FRPLimbo.getInstance().teleport(player);
+        FRPLimbo.getInstance().teleport0(player);
         player.getInventory().clear();
     }
 
